@@ -26,8 +26,9 @@ EV_ENERGY_EQ = q("0.17 kWh / km")
 # From https://impactco2.fr/outils/comparateur?value=1&comparisons=streamingvideo
 STREAMING_GWP_EQ = q("15.6 h / kgCO2eq")
 
-# From https://ourworldindata.org/population-growth
-ONE_PERCENT_WORLD_POPULATION = 80_000_000
+# From https://ourworldindata.org/population-growth - 80,000,000
+# From https://msu.edu/about/facts
+MSU_STUDENT_POPULATION = 51_838
 
 DAYS_IN_YEAR = 365
 
@@ -59,7 +60,7 @@ def format_energy_eq_physical_activity(
 
     walking_eq = energy / WALKING_ENERGY_EQ
     if walking_eq < q("1 km"):
-        walking_eq = walking_eq.to("meter")
+        walking_eq = walking_eq.to("yard")
     return PhysicalActivity.WALKING, walking_eq
 
 
@@ -67,11 +68,12 @@ def format_energy_eq_electric_vehicle(energy: Quantity) -> Quantity:
     energy = energy.to("kWh")
     ev_eq = energy / EV_ENERGY_EQ
     if ev_eq < q("1 km"):
-        ev_eq = ev_eq.to("meter")
+        ev_eq = ev_eq.to("yard")
     return ev_eq
 
 
 def format_gwp_eq_streaming(gwp: Quantity) -> Quantity:
+    gwp = q(f"{gwp.magnitude} {gwp.units}")
     gwp = gwp.to("kgCO2eq")
     streaming_eq = gwp * STREAMING_GWP_EQ
     if streaming_eq < q("1 h"):
@@ -84,7 +86,7 @@ def format_gwp_eq_streaming(gwp: Quantity) -> Quantity:
 def format_energy_eq_electricity_production(
     energy: Quantity,
 ) -> tuple[EnergyProduction, Quantity]:
-    electricity_eq = energy * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
+    electricity_eq = energy * MSU_STUDENT_POPULATION * DAYS_IN_YEAR
     electricity_eq = electricity_eq.to("TWh")
     if electricity_eq > YEARLY_NUCLEAR_ENERGY_EQ:
         return EnergyProduction.NUCLEAR, electricity_eq / YEARLY_NUCLEAR_ENERGY_EQ
@@ -92,13 +94,14 @@ def format_energy_eq_electricity_production(
     return EnergyProduction.WIND, electricity_eq / YEARLY_WIND_ENERGY_EQ
 
 
+# Change to Michigan
 def format_energy_eq_electricity_consumption_ireland(energy: Quantity) -> Quantity:
-    electricity_eq = energy * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
+    electricity_eq = energy * MSU_STUDENT_POPULATION * DAYS_IN_YEAR
     electricity_eq = electricity_eq.to("TWh")
     return electricity_eq / YEARLY_IRELAND_ELECTRICITY_CONSUMPTION
 
 
 def format_gwp_eq_airplane_paris_nyc(gwp: Quantity) -> Quantity:
-    gwp_eq = gwp * ONE_PERCENT_WORLD_POPULATION * DAYS_IN_YEAR
+    gwp_eq = gwp * MSU_STUDENT_POPULATION * DAYS_IN_YEAR
     gwp_eq = gwp_eq.to("kgCO2eq")
     return gwp_eq / AIRPLANE_PARIS_NYC_GWP_EQ

@@ -159,11 +159,11 @@ def display_equivalent_energy(impacts):
     st.divider()
 
     st.markdown(
-        '<h3 align="center">What if 1% of the planet does the same everyday for 1 year ?</h3>',
+        '<h3 align="center">What if every student at MSU did the same for 1 year ?</h3>',
         unsafe_allow_html=True,
     )
     st.markdown(
-        f"""<p align="center"> {impacts.energy.magnitude:.3g} {impacts.energy.units} x 1% of 8 billion people x 365 days are ≈ equivalent to</p><br>""",
+        f"""<p align="center"> {impacts.energy.magnitude:.3g} {impacts.energy.units} x 51,838 x 365 days are ≈ equivalent to</p><br>""",
         unsafe_allow_html=True,
     )
 
@@ -204,7 +204,7 @@ def display_equivalent_ghg(impacts):
 
     with col1:
         st.markdown(
-            """<p style='font-size:30px;text-align: center;margin-bottom :2px'><strong>🌍️GHG Emissions</p>""",
+            """<p style='font-size:30px;text-align: center;margin-bottom :2px'><strong>🌍️ GHG (Greenhouse Gas) Emissions</p>""",
             unsafe_allow_html=True,
         )
         st.markdown(
@@ -226,11 +226,11 @@ def display_equivalent_ghg(impacts):
     st.divider()
 
     st.markdown(
-        '<h3 align="center">What if 1% of the planet does the same everyday for 1 year ?</h3>',
+        '<h3 align="center">What if every student at MSU does the same everyday for 1 year ?</h3>',
         unsafe_allow_html=True,
     )
     st.markdown(
-        f"""<p align="center"> {impacts.gwp.magnitude:.3g} {impacts.gwp.units} x 1% of 8 billion people x 365 days are ≈ equivalent to</p><br>""",
+        f"""<p align="center"> {impacts.gwp.magnitude:.3g} {impacts.gwp.units} x 51,838 x 365 days are ≈ equivalent to</p><br>""",
         unsafe_allow_html=True,
     )
 
@@ -239,7 +239,7 @@ def display_equivalent_ghg(impacts):
     with col5:
         paris_nyc_airplane = format_gwp_eq_airplane_paris_nyc(impacts.gwp)
         st.markdown(
-            f'<h4 align="center">✈️ {round(paris_nyc_airplane.magnitude):,} Paris ↔ NYC</h4>',
+            f'<h4 align="center">✈️ {paris_nyc_airplane.magnitude:.3f} Paris ↔ NYC</h4>',
             unsafe_allow_html=True,
         )
         st.markdown('<p align="center"><i>Based on GHG emissions<i></p>', unsafe_allow_html=True)
