@@ -39,6 +39,52 @@ def msu_mode(key_suffix: str = "msu"):
     charts_placeholder = st.empty()
     top_placeholder = st.empty()
 
+    # Edits to font size and stuff
+    st.markdown("""
+        <style>
+        /* Label/title size */
+        [data-testid="stSelectbox"] label { font-size: 1.5rem; }
+        /* Selected value size */
+        [data-testid="stSelectbox"] div[data-baseweb="select"] { font-size: 1.5rem; }
+        /* Fix cutoff by increasing the box height */
+        [data-testid="stSelectbox"] div[data-baseweb="select"] > div { 
+            height: auto; 
+            min-height: 50px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+        /* Dropdown options size */
+        [data-testid="stSelectbox"] li { font-size: 1.5rem; }
+        </style>
+    """, unsafe_allow_html=True)
+    st.markdown("""
+        <style>
+        /* Label/title size */
+        [data-testid="stSelectbox"] label p { font-size: 1.5rem !important; }
+        </style>
+    """, unsafe_allow_html=True)
+    st.markdown("""
+        <style>
+        /* Button text size */
+        [data-testid="stButton"] button p {
+            font-size: 1.5rem !important;
+        }
+        /* Button size */
+        [data-testid="stButton"] button {
+            padding: 0.75rem 2rem;
+            height: auto;
+        }
+        /* Total Calculations label */
+        [data-testid="stMetricLabel"] p {
+            font-size: 1.5rem !important;
+        }
+        /* Total Calculations value */
+        [data-testid="stMetricValue"] {
+            font-size: 4rem !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
     with st.container(border=True):
         df = load_models(filter_main=True)
 
@@ -99,46 +145,44 @@ def msu_mode(key_suffix: str = "msu"):
         except Exception as e:
             st.error(f"Error: {e}")
 
-    # Fill top sentence placeholder
-    if st.session_state[impacts_key] is not None:
-        top_placeholder.markdown(
-            '<p align="center">Making this request to the LLM is equivalent to the following actions :</p>',
-            unsafe_allow_html=True,
-        )
-
     # Render charts/metrics into top placeholder
     if st.session_state[tally_key] > 0:
         import plotly.express as px
 
         with charts_placeholder.container():
-            st.markdown('<h1 align="center">How Much Energy Does Generative AI Use? Cumulated Result:</h1>', unsafe_allow_html=True)
+            st.markdown('<h1 align="center">How Much Energy Does Generative AI Use?</h1>', unsafe_allow_html=True)
+            st.markdown(
+                '<p style="text-align: center; font-size: 1rem;">EcoLogits is an open source tool for <strong>estimating</strong> the energy consumption and environmental footprint when using generative AI models. It is developed by the CodeCarbon non-profit.</p>',
+                unsafe_allow_html=True)
 
             col_s, col_f, col_m = st.columns(3)
 
-            # Metric 1: Streaming time (in minutes)
+            # Metric 2: Equivalent flights
             with col_s:
+                impacts = st.session_state[impacts_key]
+                flights_value = format_gwp_eq_airplane_paris_nyc(impacts.gwp)
+                st.markdown(f"""
+                    <div style='padding-top: 80px; text-align: center;'>
+                        <p style='font-size: 5rem; font-weight: bold; margin: 0;'>✈️</p>
+                        <p style='font-size: 2rem; color: gray; margin-bottom: 4px;'>What if every student at MSU<br>did the same for 1 year?</p>
+                        <p style='font-size: 1rem; color: gray; margin-bottom: 0.3px;'> 62.4 mWh x 51,838 x 365 days are ≈ equivalent to:</p>
+                        <p style='font-size: 5rem; font-weight: bold; margin: 0;'>{flights_value.magnitude:.3f} <span style='font-size: 2rem;'>Paris ↔ NYC</span></p>                    </div>
+                        """, unsafe_allow_html=True)
+
+            # Metric 1: Streaming time (in minutes)
+            with col_f:
                 streaming_minutes = st.session_state[streaming_total_key] / 60
                 st.markdown(f"""
                     <div style='padding-top: 80px; text-align: center;'>
                         <p style='font-size: 5rem; font-weight: bold; margin: 0;'>⏯️</p>
-                        <p style='font-size: 2rem; color: gray; margin-bottom: 4px;'>Total Streaming Time (Min)</p>
-                        <p style='font-size: 5rem; font-weight: bold; margin: 0;'>{streaming_minutes:.3f} min</p>
-                    </div>
-                """, unsafe_allow_html=True)
-
-            # Metric 2: Equivalent flights
-            with col_f:
-                st.markdown(f"""
-                    <div style='padding-top: 80px; text-align: center;'>
-                        <p style='font-size: 5rem; font-weight: bold; margin: 0;'>✈️</p>
-                        <p style='font-size: 1.5rem; color: gray; margin-bottom: 4px;'>Total Equivalent Flights (Paris ↔ NYC)<br>If Every Student at MSU did this Every Day for a Year</p>
-                        <p style='font-size: 5rem; font-weight: bold; margin: 0;'>{st.session_state[flights_total_key]:.3f}</p>
-                    </div>
+                        <p style='font-size: 2rem; color: gray; margin-bottom: 4px;'>Total Cumulative Streaming<br>Time Across Responses (Min)</p>
+                        <p style='font-size: 5rem; font-weight: bold; margin: 0;'>{streaming_minutes:.3f} <span style='font-size: 2rem;'>min</span></p>                    </div>
                 """, unsafe_allow_html=True)
 
             # Chart 3: Responses per provider
             model_counts = st.session_state[model_counts_key]
             with col_m:
+                st.markdown("<div style='padding-top: 80px;'>", unsafe_allow_html=True)
                 fig_models = px.pie(
                     values=list(model_counts.values()),
                     names=list(model_counts.keys()),
@@ -148,16 +192,17 @@ def msu_mode(key_suffix: str = "msu"):
                 fig_models.update_traces(domain=dict(x=[0.1, 0.9], y=[0.1, 0.9]))
                 fig_models.update_layout(
                     title=dict(
-                        text="Responses by Provider",
+                        text="Cumulative Responses by Provider:",
                         x=0.5,
                         xanchor="center",
-                        font=dict(size=30),
+                        font=dict(size=25),
                     ),
                     font=dict(size=30),
                     legend=dict(font=dict(size=30)),
                     margin=dict(t=60, b=10, l=10, r=10),
                 )
                 st.plotly_chart(fig_models, use_container_width=True)
+                st.markdown("</div>", unsafe_allow_html=True)
 
     # Button and tally row
     col_btn, col_tally = st.columns([1, 3])
@@ -171,7 +216,6 @@ def msu_mode(key_suffix: str = "msu"):
         impacts = st.session_state[impacts_key]
 
         with st.container(border=False):
-            st.markdown('<h3 align="center">Equivalences</h3>', unsafe_allow_html=True)
 
             page = st.radio(
                 "Equivalent to display",
