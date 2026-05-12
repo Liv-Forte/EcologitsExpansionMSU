@@ -1,5 +1,5 @@
 # Ecologits Calculator - MSU
-This calculator is an adaptation/expanded version of the HuggingFace Ecologits calculator. To learn more about the calculator, see below.
+This calculator is an adaptation/expanded version of the HuggingFace Ecologits calculator, adding an addional MSU page. This was intended to be optimized for a tabling event at the MSU Library in April 2026. To learn more about the calculator, see the original documentation below.
 
 <div align="center">
   <a href="https://ecologits.ai/">
