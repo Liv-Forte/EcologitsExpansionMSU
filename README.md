@@ -1,5 +1,5 @@
 # Ecologits Calculator - MSU
-This calculator is an adaptation/expanded version of the HuggingFace Ecologits calculator, adding an addional MSU page. This was intended to be optimized for a tabling event at the MSU Library in April 2026. To learn more about the calculator, see the original documentation below.
+This calculator is an adaptation/expanded version of the HuggingFace Ecologits calculator, adding an addional MSU page. This was intended to be optimized for a tabling event at the MSU Library in April 2026. To learn more about the calculator, see the original documentation below:
 
 <div align="center">
   <a href="https://ecologits.ai/">
@@ -29,6 +29,10 @@ The calculator provides:
 - **Support for multiple AI providers and models**
 - **Educational insights** into sustainable AI practices
 
+***This MSU addition provides:***
+- **Estimations based on MSU student population**
+- **Locally records the amount of responses, and tallies results across all entries**
+
 ## ✨ Features
 
 - **🧮 Interactive Calculator**: Easily estimate environmental impacts by selecting a provider, model, and example usage
@@ -54,7 +58,8 @@ If you want to run the calculator locally, follow the instructions below.
 
 ```bash
 # Clone the repository
-git clone https://github.com/mlco2/ecologits-calculator.git
+git clone https://github.com/Liv-Forte/EcologitsExpansionMSU.git
+cd EcologitsExpansionMSU
 cd ecologits-calculator
 
 # Install dependencies using uv
