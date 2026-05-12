@@ -1,4 +1,7 @@
-# EcoLogits Calculator
+# Ecologits Calculator - MSU
+This calculator is an adaptation/expanded version of the HuggingFace Ecologits calculator. To learn more about the calculator, see below. 
+
+To open this calculator, navigate to 
 
 <div align="center">
   <a href="https://ecologits.ai/">
