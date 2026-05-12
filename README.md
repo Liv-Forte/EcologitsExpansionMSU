@@ -71,6 +71,30 @@ uv run streamlit run app.py
 
 The calculator will open in your browser at `http://localhost:8501`
 
+### Locally Hosting + Troubleshooting
+
+If you have correctly installed and downloaded the necessary packages, you are ready to locally host. To do this, open up the terminal, and navigate to the ecologits-calculator folder:
+
+```bash
+cd EcologitsExpansionMSU
+cd ecologits-calculator
+```
+
+Once you have navigated to the correct folder, then type in the command:
+
+```bash
+uv run streamlit run app.py
+```
+
+If that doesn't work, try
+
+```bash
+python3 -m streamlit run app.py
+```
+
+The calculator will open in your browser at `http://localhost:8501` if it doesn't open automatically, copy and paste or type this link into your browser once the server is running locally, and it should work.
+
+
 ## 📚 How It Works
 The basic workflow of the EcoLogits Calculator involves the following steps:
 1. **Select Model**: Choose an AI provider and model from the available options
